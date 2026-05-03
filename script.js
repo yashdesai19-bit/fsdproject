@@ -125,29 +125,76 @@ function downloadPDF() {
     let m = now.getMonth(), y = now.getFullYear();
 
     let pos = 10;
+    
+    // Title
+    doc.setFontSize(16);
     doc.text("Monthly Expense Report", 10, pos);
-    pos += 10;
+    pos += 12;
+
+    // Table Headers
+    doc.setFontSize(11);
+    doc.setFont(undefined, 'bold');
+    doc.text("Date", 10, pos);
+    doc.text("Category", 40, pos);
+    doc.text("Description", 80, pos);
+    doc.text("Amount", 170, pos);
+    
+    pos += 2;
+    doc.line(10, pos, 190, pos); // Draw a line under headers
+    pos += 8;
 
     let catTotal = {};
+    let grandTotal = 0;
+    doc.setFont(undefined, 'normal');
 
     expenses.forEach(e => {
         let d = new Date(e.timestamp);
 
         if (d.getMonth() === m && d.getFullYear() === y) {
-            catTotal[e.category] = (catTotal[e.category] || 0) + e.amount;
-            doc.text(`${e.date} | ${e.category} | ₹${e.amount}`, 10, pos);
-            pos += 6;
+            // Strip emojis to prevent jsPDF encoding errors
+            let cleanCategory = e.category.replace(/[\u1000-\uFFFF]+/g, '').trim();
+            
+            // Limit description length so it doesn't overlap columns
+            let desc = e.description || "No description";
+            if (desc.length > 35) desc = desc.substring(0, 32) + "...";
+
+            // Add to totals
+            catTotal[cleanCategory] = (catTotal[cleanCategory] || 0) + e.amount;
+            grandTotal += e.amount;
+
+            // Print row
+            doc.text(e.date, 10, pos);
+            doc.text(cleanCategory, 40, pos);
+            doc.text(desc, 80, pos);
+            doc.text("Rs. " + e.amount, 170, pos);
+            pos += 8;
         }
     });
 
+    pos += 5;
+    doc.line(10, pos, 190, pos); // Draw a line above summary
     pos += 10;
-    doc.text("Category Summary:", 10, pos);
-    pos += 6;
 
+    // Category Summary Section
+    doc.setFontSize(14);
+    doc.setFont(undefined, 'bold');
+    doc.text("Category Summary:", 10, pos);
+    pos += 8;
+
+    doc.setFontSize(11);
+    doc.setFont(undefined, 'normal');
     for (let c in catTotal) {
-        doc.text(`${c}: ₹${catTotal[c]}`, 10, pos);
-        pos += 6;
+        // Skip empty categories if any
+        if (c) { 
+            doc.text(`${c}: Rs. ${catTotal[c]}`, 10, pos);
+            pos += 6;
+        }
     }
+
+    pos += 4;
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
+    doc.text(`Total Monthly Expenses: Rs. ${grandTotal}`, 10, pos);
 
     doc.save("Monthly_Report.pdf");
 }

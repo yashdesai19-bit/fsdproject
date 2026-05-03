@@ -3,7 +3,7 @@ let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 let budget = parseInt(localStorage.getItem("budget")) || 0;
 let chart;
 
-/* CLEAN OLD DATA */
+
 expenses = expenses.filter(e => e.timestamp);
 localStorage.setItem("expenses", JSON.stringify(expenses));
 
@@ -131,7 +131,6 @@ function downloadPDF() {
     doc.text("Monthly Expense Report", 10, pos);
     pos += 12;
 
-    // Table Headers
     doc.setFontSize(11);
     doc.setFont(undefined, 'bold');
     doc.text("Date", 10, pos);
@@ -140,7 +139,7 @@ function downloadPDF() {
     doc.text("Amount", 170, pos);
     
     pos += 2;
-    doc.line(10, pos, 190, pos); // Draw a line under headers
+    doc.line(10, pos, 190, pos);
     pos += 8;
 
     let catTotal = {};
@@ -151,14 +150,14 @@ function downloadPDF() {
         let d = new Date(e.timestamp);
 
         if (d.getMonth() === m && d.getFullYear() === y) {
-            // Strip emojis to prevent jsPDF encoding errors
+            
             let cleanCategory = e.category.replace(/[\u1000-\uFFFF]+/g, '').trim();
             
-            // Limit description length so it doesn't overlap columns
+            
             let desc = e.description || "No description";
             if (desc.length > 35) desc = desc.substring(0, 32) + "...";
 
-            // Add to totals
+            
             catTotal[cleanCategory] = (catTotal[cleanCategory] || 0) + e.amount;
             grandTotal += e.amount;
 
@@ -172,10 +171,10 @@ function downloadPDF() {
     });
 
     pos += 5;
-    doc.line(10, pos, 190, pos); // Draw a line above summary
+    doc.line(10, pos, 190, pos);
     pos += 10;
 
-    // Category Summary Section
+   
     doc.setFontSize(14);
     doc.setFont(undefined, 'bold');
     doc.text("Category Summary:", 10, pos);
@@ -184,7 +183,7 @@ function downloadPDF() {
     doc.setFontSize(11);
     doc.setFont(undefined, 'normal');
     for (let c in catTotal) {
-        // Skip empty categories if any
+      
         if (c) { 
             doc.text(`${c}: Rs. ${catTotal[c]}`, 10, pos);
             pos += 6;

@@ -3,7 +3,6 @@ let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 let budget = parseInt(localStorage.getItem("budget")) || 0;
 let chart;
 
-
 expenses = expenses.filter(e => e.timestamp);
 localStorage.setItem("expenses", JSON.stringify(expenses));
 
@@ -125,8 +124,7 @@ function downloadPDF() {
     let m = now.getMonth(), y = now.getFullYear();
 
     let pos = 10;
-    
-    // Title
+
     doc.setFontSize(16);
     doc.text("Monthly Expense Report", 10, pos);
     pos += 12;
@@ -137,7 +135,7 @@ function downloadPDF() {
     doc.text("Category", 40, pos);
     doc.text("Description", 80, pos);
     doc.text("Amount", 170, pos);
-    
+
     pos += 2;
     doc.line(10, pos, 190, pos);
     pos += 8;
@@ -150,18 +148,14 @@ function downloadPDF() {
         let d = new Date(e.timestamp);
 
         if (d.getMonth() === m && d.getFullYear() === y) {
-            
             let cleanCategory = e.category.replace(/[\u1000-\uFFFF]+/g, '').trim();
-            
-            
+
             let desc = e.description || "No description";
             if (desc.length > 35) desc = desc.substring(0, 32) + "...";
 
-            
             catTotal[cleanCategory] = (catTotal[cleanCategory] || 0) + e.amount;
             grandTotal += e.amount;
 
-            // Print row
             doc.text(e.date, 10, pos);
             doc.text(cleanCategory, 40, pos);
             doc.text(desc, 80, pos);
@@ -174,7 +168,6 @@ function downloadPDF() {
     doc.line(10, pos, 190, pos);
     pos += 10;
 
-   
     doc.setFontSize(14);
     doc.setFont(undefined, 'bold');
     doc.text("Category Summary:", 10, pos);
@@ -183,8 +176,7 @@ function downloadPDF() {
     doc.setFontSize(11);
     doc.setFont(undefined, 'normal');
     for (let c in catTotal) {
-      
-        if (c) { 
+        if (c) {
             doc.text(`${c}: Rs. ${catTotal[c]}`, 10, pos);
             pos += 6;
         }

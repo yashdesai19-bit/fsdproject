@@ -1,91 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Expense Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Dashboard</title>
 
-<!-- CSS -->
-<link rel="stylesheet" href="style.css">
-<link rel="script.js" href="">
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
 
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
 <body>
 
-<div class="header">💰 Expense Tracker</div>
-
-<div class="container">
-
-<div class="balance">
-    <h4>💰 Total Balance</h4>
-    <h2 id="balance">₹ 0</h2>
-</div>
-
-<div class="section">
-    <h3>Add Balance</h3>
-    <input type="number" id="balanceInput" placeholder="Enter amount">
-    <button onclick="addBalance()">Add Balance</button>
-</div>
-
-<div class="grid">
-    <div class="card" onclick="show('add')">➕ Add Expense</div>
-    <div class="card" onclick="show('list')">📋 Expenses</div>
-    <div class="card" onclick="show('analytics')">📊 Analytics</div>
-    <div class="card" onclick="show('budget')">🎯 Budget</div>
-</div>
-
-<div class="section" id="add">
-    <h3>Add Expense</h3>
-    <input type="number" id="amount" placeholder="Enter amount">
-
-    <select id="category">
-        <option>Food</option>
-        <option>Transport</option>
-        <option>Shopping</option>
-        <option>Other</option>
-    </select>
-
-    <input type="text" id="description" placeholder="Enter description">
-
-    <button onclick="addExpense()">Add</button>
-</div>
-
-<div class="section hidden" id="list">
-    <h3>Recent Expenses</h3>
-
-    <button onclick="downloadPDF()">Download Monthly Report</button>
-    <button onclick="clearExpenses()" class="danger-btn">Clear All Transactions</button>
-
-    <div id="expenseList"></div>
-</div>
-
-<div class="section hidden" id="analytics">
-    <h3>Analytics</h3>
-    <div class="chart-box">
-        <canvas id="expenseChart"></canvas>
+    <div class="header">
+        <div style="font-size:30px; position:relative; display:inline-block;">
+            <i class="bi bi-wallet2"></i>
+            <span style="position:absolute; top:-5px; right:-10px; font-size:16px; font-weight:bold;">₹</span>
+        </div> Expense Tracker
     </div>
-</div>
 
-<div class="section hidden" id="budget">
-    <h3>Budget</h3>
-    <input type="number" id="budgetInput" placeholder="Enter budget">
-    <button onclick="saveBudget()">Save</button>
+    <div class="container">
 
-    <p>Budget: ₹ <span id="budgetValue">0</span></p>
-    <p>Spent: ₹ <span id="spentAmount">0</span></p>
-    <p>Status: <span id="budgetStatus"></span></p>
-</div>
+        <div class="balance">
+            <h4>💰 <b>Total Balance</b></h4>
+            <h2 id="balance">₹ 0</h2>
+            <p><b>Manage your expenses smartly</b></p>
+           <span> <img class="imgpg" src=expanceimg.png
+            " alt=""></span>
+        </div>
 
-</div>
+        <div class="section">
+            <h3> 💸
+                Add Balance</h3>
+            <input type="number" id="balanceInput" placeholder="Enter amount">
+            <button onclick="addBalance()">Add Balance</button>
+        </div>
 
-<!-- JS -->
-<script src="script.js"></script>
+        <div class="grid">
+            <div class="card" onclick="show('add')">
+                <div class="icon">➕</div>
+                <span class="card-label">Add Expense</span>
+                <span class="card-sub">Add new expense</span>
+            </div>
+            <div class="card" onclick="show('list')">
+                <div class="icon">📋</div>
+                <span class="card-label">Expenses</span>
+                <span class="card-sub">View all expenses</span>
+            </div>
+            <div class="card" onclick="show('analytics')">
+                <div class="icon">📊</div>
+                <span class="card-label">Analytics</span>
+                <span class="card-sub">View insights</span>
+            </div>
+            <div class="card" onclick="show('budget')">
+                <div class="icon">🎯</div>
+                <span class="card-label">Budget</span>
+                <span class="card-sub">Set your budget</span>
+            </div>
+        </div>
+
+        <div class="section" id="add">
+            <h3>Add Expense</h3>
+            <input type="number" id="amount" placeholder="Enter amount">
+
+            <select id="category">
+                <option>🍔 Food</option>
+                <option>🚗 Transport</option>
+                <option>🛒 Shopping</option>
+                <option>🔖 Other</option>
+            </select>
+
+            <input type="text" id="description" placeholder="Enter description">
+
+            <button onclick="addExpense()">Add</button>
+        </div>
+
+        <div class="section hidden" id="list">
+            <h3>Recent Expenses</h3>
+
+            <button onclick="downloadPDF()">Download Monthly Report</button>
+            <button onclick="clearExpenses()" class="danger-btn">Clear All Transactions</button>
+
+            <div id="expenseList"></div>
+        </div>
+
+        <div class="section hidden" id="analytics">
+            <h3>Analytics</h3>
+            <div class="chart-box">
+                <canvas id="expenseChart"></canvas>
+            </div>
+        </div>
+
+        <div class="section hidden" id="budget">
+            <h3>Budget</h3>
+            <input type="number" id="budgetInput" placeholder="Enter budget">
+            <button onclick="saveBudget()">Save</button>
+
+            <p>Budget: ₹ <span id="budgetValue">0</span></p>
+            <p>Spent: ₹ <span id="spentAmount">0</span></p>
+            <p>Status: <span id="budgetStatus"></span></p>
+        </div>
+
+    </div>
+
+    <!-- JS — keep your original file name -->
+    <script src="scripy.js"></script>
 
 </body>
+
 </html>
